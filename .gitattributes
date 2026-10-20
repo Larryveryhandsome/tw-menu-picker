@@ -1,0 +1,5 @@
+* text=auto eol=lf
+# Excel 習慣的換行（菜單範本用 Excel 開最方便）
+*.csv text eol=crlf
+*.png binary
+*.jpg binary
