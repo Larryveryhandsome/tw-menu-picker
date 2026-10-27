@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>今天吃什麼？</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="top">
+    <div class="shop">
+      <h1 id="title">今天吃什麼？</h1>
+      <div id="shopName" class="shop-name"></div>
+      <div id="shopInfo" class="shop-info"></div>
+    </div>
+    <button id="btnTheme" type="button" class="ghost" title="切換深色／淺色">深色</button>
+  </header>
+
+  <main>
+    <section class="card">
+      <label class="field">
+        <span>菜單</span>
+        <select id="menuSelect"></select>
+      </label>
+      <div class="tabs" role="tablist">
+        <button type="button" role="tab" id="tabSolo" class="tab active" aria-selected="true">一個人吃</button>
+        <button type="button" role="tab" id="tabGroup" class="tab" aria-selected="false">團體訂餐</button>
+      </div>
+
+      <div class="filters">
+        <label class="field">
+          <span>要抽什麼</span>
+          <select id="mode">
+            <option value="auto">自動（有主餐有飲料就配一組）</option>
+            <option value="combo">主餐＋飲料</option>
+            <option value="main">只要主餐</option>
+            <option value="drink">只要飲料</option>
+          </select>
+        </label>
+        <label class="field">
+          <span id="budgetLabel">總價上限（元，空白＝不限）</span>
+          <input id="budget" type="number" inputmode="numeric" min="0" step="1" placeholder="不限">
+        </label>
+        <div class="group-only row2" hidden>
+          <label class="field">
+            <span>人數</span>
+            <input id="people" type="number" inputmode="numeric" min="1" max="200" step="1">
+          </label>
+          <label class="field">
+            <span>每人上限（元，可空白）</span>
+            <input id="perPerson" type="number" inputmode="numeric" min="0" step="1" placeholder="不限">
+          </label>
+        </div>
+
+        <fieldset id="catBox" class="chips-box">
+          <legend>主餐類別（都不勾＝全部）</legend>
+          <div id="cats" class="chips"></div>
+        </fieldset>
+        <fieldset id="typeBox" class="chips-box">
+          <legend>飲料類型（都不勾＝全部）</legend>
+          <div id="types" class="chips"></div>
+        </fieldset>
+        <fieldset class="chips-box">
+          <legend>不要的食材／過敏（勾了就不會抽到）</legend>
+          <div id="tags" class="chips"></div>
+          <input id="excludeText" type="text" placeholder="其他不要的字，用頓號或空白分開，例如：香菜、洋蔥">
+        </fieldset>
+      </div>
+
+      <button id="btnPick" type="button" class="big">幫我選！</button>
+    </section>
+
+    <section id="result" class="card result" aria-live="polite" hidden></section>
+
+    <section class="card">
+      <h2>收藏的組合</h2>
+      <ul id="favList" class="list"></ul>
+      <h2>最近選擇 <button id="btnClearRecent" type="button" class="link">清除</button></h2>
+      <ul id="recentList" class="list"></ul>
+      <p id="storageMsg" class="hint" hidden>這個瀏覽器不能存資料，收藏和紀錄只在這次有效。</p>
+    </section>
+
+    <details class="card">
+      <summary>看完整菜單</summary>
+      <div id="menuView"></div>
+    </details>
+
+    <details class="card" id="importBox">
+      <summary>換成我的菜單（Excel／CSV／JSON）</summary>
+      <p class="hint">
+        在 Excel 把整張表（含第一列欄位名稱）選起來複製，貼到下面就可以。
+        欄位：<b>類別、品名、價格</b>（必填品名、價格），<b>標籤</b>（食材，用頓號分開）、<b>是否飲料</b>（是／否）、<b>飲料類型</b>、備註。
+        範本在 <code>data/menu.example.csv</code>。
+      </p>
+      <textarea id="importText" rows="7" placeholder="類別	品名	價格	標籤	是否飲料	飲料類型&#10;蛋餅	原味蛋餅	30	蛋	否&#10;飲料	紅茶	20		是	茶"></textarea>
+      <div class="row">
+        <input id="importName" type="text" placeholder="菜單名稱（例如：我的早餐店）">
+        <button id="btnImport" type="button">套用這份菜單</button>
+        <label class="file">選擇 CSV／JSON 檔<input id="importFile" type="file" accept=".csv,.tsv,.txt,.json,text/csv,application/json"></label>
+      </div>
+      <div id="importMsg" class="msg" hidden></div>
+      <div class="row">
+        <button id="btnExportJson" type="button">匯出目前菜單 JSON</button>
+        <button id="btnExportCsv" type="button">匯出目前菜單 CSV</button>
+        <button id="btnRemoveCustom" type="button" hidden>刪除我匯入的菜單</button>
+      </div>
+    </details>
+  </main>
+
+  <footer>
+    <div id="footNote"></div>
+    <div>開源工具 <a href="https://github.com/Larryveryhandsome/tw-menu-picker" target="_blank" rel="noopener">tw-menu-picker</a>（Apache-2.0）</div>
+  <p class="custom-ad">需要改成你們公司的版本、幫忙安裝或串接？加 LINE 官方帳號 <a href="https://line.me/R/ti/p/@812ibtir" target="_blank" rel="noopener">@812ibtir</a>（留白事務所・林其衞），原則上 1～2 個工作天回覆報價。</p></footer>
+
+  <script src="config.js"></script>
+  <script src="data/menus.js"></script>
+  <script src="js/picker.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+{
+  "name": "tw-menu-picker",
+  "version": "1.0.0",
+  "description": "今天吃什麼？隨機選餐器：載入店家菜單，依預算、類別、不要的食材隨機配餐，也能一鍵排出辦公室團體訂餐",
+  "license": "Apache-2.0",
+  "private": true,
+  "scripts": {
+    "test": "node --test \"tests/*.test.js\""
+  }
+}

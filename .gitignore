@@ -1,0 +1,6 @@
+node_modules/
+# 你自己的菜單不要進 git，只留範本
+data/*.csv
+!data/menu.example.csv
+.DS_Store
+Thumbs.db
