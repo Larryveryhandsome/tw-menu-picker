@@ -266,14 +266,14 @@ test('跳脫 HTML、Google 地圖連結、預算解析', () => {
   assert.equal(P.parseBudget('abc'), Infinity);
 });
 
-test('資料檔沒有真實店家資料：沒有 email、只有 0900-000-00x 示範電話', () => {
+test('資料檔沒有真實店家資料：沒有 email、只有 0900-000-00x 示範電話（和作者聯絡電話）', () => {
   const files = ['index.html', 'config.js', 'README.md', 'NOTICE', 'data/menus.js', 'data/menu.example.csv',
     'js/picker.js', 'js/app.js', 'css/style.css', 'docs/金鑰申請.md'];
   for (const f of files) {
     const text = fs.readFileSync(path.join(root, f), 'utf8');
     assert.ok(!/[\w.+-]+@[\w-]+\.[\w.]+/.test(text), `${f} 含有 email`);
     for (const m of text.match(/0\d[\d-]{7,11}\d/g) || []) {
-      assert.match(m, /^0900-000-00\d$/, `${f} 含有電話 ${m}`);
+      assert.match(m, /^(0900-000-00\d|0928-880-392)$/, `${f} 含有電話 ${m}`);   // 只允許示範電話與作者公開的聯絡電話
     }
   }
 });
